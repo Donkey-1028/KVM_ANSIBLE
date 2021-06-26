@@ -1,0 +1,33 @@
+#parted
+disk_name: /dev/sdb
+partition_number: 1
+pv_name: "{{ disk_name }}{{ partition_number }}"
+vg_name: kvm_vg
+lv_name: kvm_lv
+mount_point: /app
+file_system_type: xfs
+
+#network
+network_connections:
+  - name: br0
+    type: bridge
+    autoconnect: yes
+    interface_name: br0
+    ip:
+      dhcp4: no
+      gateway4: 192.168.23.1
+      dns:
+        - 8.8.8.8
+      auto6: no
+      address:
+        - 192.168.23.100/24
+
+  - name: enp2s0
+    type: ethernet
+    autoconnect: yes
+    master: br0 
+    interface_name: enp2s0
+#interface_name: enp2s0
+#ipv4_address: 192.168.23.100/24
+#ipv4_gateway: 192.168.23.1
+#ipv4_dns: 8.8.8.8

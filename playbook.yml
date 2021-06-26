@@ -1,0 +1,33 @@
+---
+- name: Configure KVM
+  hosts: kvm_hosts
+  vars_files:
+    - vars/kvm_hosts.yml
+  pre_tasks:
+    - name: Disable firewalld
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+  roles:
+#    - parted
+#    - kvm
+    - rhel-system-roles.network
+  post_tasks:
+    - name: Destroy virbr0
+      shell: virsh net-destory default
+
+    - name: Undefine virbr0
+      shell: virsh net-undefine default
+      notify: restart libvirtd
+
+  handlers:
+    - name: restart libvirtd
+      service:
+        name: libvirtd
+        state: restarted
+  

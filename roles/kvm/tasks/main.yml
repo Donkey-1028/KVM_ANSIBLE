@@ -1,0 +1,17 @@
+---
+- name: Install KVM package
+  yum:
+    name:
+      - qemu-kvm
+      - libvirt
+      - virt-manager
+      - virt-install
+    state: present
+
+- name: Start and enable libvirtd
+  service:
+    name: libvirtd
+    state: started
+    enabled: yes
+
+
